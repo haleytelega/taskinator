@@ -2,6 +2,7 @@ var taskIdCounter = 0;
 //var buttonEl = document.querySelector("#save-task"); // adding the DOM object reference to the task list
 var formEl = document.querySelector("#task-form");
 var tasksToDoEl = document.querySelector("#tasks-to-do"); // task item DOM refernce
+var pageContentEl = document.querySelector("#page-content");
 
 var taskFormHandler = function (event) { //placing code into a seperate function to hold a single responsibility
     event.preventDefault(); //prevents the browser from refreshing and carring out its default bahaviour
@@ -91,5 +92,23 @@ var createTaskActions = function(taskId){
     return actionContainerEl;
 };
 
+var taskButtonHandler = function(event){ //event reports the element on which the event occurs, in this case, click event.
+    console.log(event.target);
+
+    if (event.target.matches(".delete-btn")) {
+        //get the elements task id
+        var taskId = event.target.getAttribute("data-task-id");
+        deleteTask(taskId);
+    }
+};
+
+var deleteTask = function(taskId) {
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+    console.log(taskSelected);
+    taskSelected.remove(); // actually removing the task
+};
+
 formEl.addEventListener("submit", taskFormHandler); //saying on a button click, create a task
+
+pageContentEl.addEventListener("click", taskButtonHandler);
 
