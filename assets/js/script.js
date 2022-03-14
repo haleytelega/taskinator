@@ -55,6 +55,8 @@ for (var i = 0; i < tasks.length; i++) {
     tasks[i].type = taskType;
     }
 
+    saveTasks(); 
+
     alert("Task Updated!");
 
     formEl.removeAttribute("data-task-id"); //removing tasks ensures user can create new tasks
@@ -86,11 +88,11 @@ var createTaskEl = function(taskDataObj){
 
     tasks.push(taskDataObj); // push() adds any content between the () to the end of the specific array.
 
+    //saving to localStorage
+    saveTasks()
+
     //increase task counter for nect unique id
     taskIdCounter++;
-
-    console.log(taskDataObj);
-    console.log(taskDataObj.status);
 };
 
 
@@ -153,6 +155,21 @@ var deleteTask = function(taskId) {
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
     console.log(taskSelected);
     taskSelected.remove(); // actually removing the task
+
+    var updatedTaskArr = [];
+
+    //loop through current tasks
+    for (var i = 0; i < tasks.length; i++) {
+        // if tasks[i].id doesn't match the value of taskId, let's keep that task and push it into the new array
+        if (tasks[i].id !== parseInt(taskId)) {
+        updatedTaskArr.push(tasks[i]);
+        }
+    }
+
+    // reassign tasks array to be the same as updatedTaskArr
+    tasks = updatedTaskArr;
+
+    saveTasks();
 };
 
 var editTask = function(taskId) {
@@ -199,8 +216,13 @@ var taskStatusChangeHandler = function(event) {
         tasks[i].status = statusValue;
     }
     }
-    console.log(tasks);
+
+    saveTasks();
 };
+
+var saveTasks = function () {
+    localStorage.setItem("tasks", JSON.stringify(tasks)); //JSON.stringify converts to strings
+}
 
 formEl.addEventListener("submit", taskFormHandler); //saying on a button click, create a task
 
