@@ -93,11 +93,17 @@ var createTaskActions = function(taskId){
 };
 
 var taskButtonHandler = function(event){ //event reports the element on which the event occurs, in this case, click event.
-    console.log(event.target);
+    var targetEl = event.target; //getting target element from event
 
-    if (event.target.matches(".delete-btn")) {
-        //get the elements task id
-        var taskId = event.target.getAttribute("data-task-id");
+    //edit button is clicked
+    if (targetEl.matches(".edit-btn")){
+        var taskId = targetEl.getAttribute("data-task-id");
+        editTask(taskId);
+    }
+
+    //delete button is clicked
+    else if (targetEl.matches(".delete-btn")) {
+        var taskId = targetEl.getAttribute("data-task-id"); 
         deleteTask(taskId);
     }
 };
@@ -106,6 +112,24 @@ var deleteTask = function(taskId) {
     var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
     console.log(taskSelected);
     taskSelected.remove(); // actually removing the task
+};
+
+var editTask = function(taskId) {
+    console.log("editing task #" + taskId);
+
+    var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']"); // get task list item element
+
+    var taskName = taskSelected.querySelector("h3.task-name").textContent; //get content from task name and type
+    
+
+    var taskType = taskSelected.querySelector("span.task-type").textContent; //only searches within the taskSelected element
+
+    document.querySelector("input[name='task-name']").value = taskName;
+    document.querySelector("select[name='task-type']").value = taskType;
+
+    document.querySelector("#save-task").textContent = "Save Task";
+
+    formEl.setAttribute("data-task-id", taskId);
 };
 
 formEl.addEventListener("submit", taskFormHandler); //saying on a button click, create a task
