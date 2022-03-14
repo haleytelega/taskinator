@@ -81,7 +81,7 @@ var createTaskActions = function(taskId) {
     // create container to hold elements
     var actionContainerEl = document.createElement("div");
     actionContainerEl.className = "task-actions";
-  
+
     // create edit button
     var editButtonEl = document.createElement("button");
     editButtonEl.textContent = "Edit";
